@@ -1,0 +1,23 @@
+{
+    "name": "deploy-dog/slavedriver",
+    "description": " A PHP based cron job runner. Manage, monitor, log and react to problems with your scheduled tasks.",
+    "license": "MIT",
+    "autoload": {
+        "psr-0" : {
+            "deploydog\\Slavedriver" : "src"
+        }
+    },
+    "require": {
+        "php": "^5.0 || ^7.0",
+        "psr/simple-cache": "^1.0",
+        "psr/log": "^1.0",
+        "mtdowling/cron-expression": "^1.2",
+        "malkusch/lock": "^1.0",
+        "cocur/slugify": "^2.5",
+        "phossa2/event": "^2.1.0"
+    },
+    "suggest": {
+        "matthiasmullie/scrapbook": "Great library with many caching adapters compatible with Slavedriver.",
+        "monolog/monolog": "Great library with compatible loggers."
+    }
+}
