@@ -11,7 +11,7 @@ You need to get something (e.g. the real system crontab) to run your Slavedriver
 * * * * * cd /path/to/project && php slavedriver.php 1>> /dev/null 2>&1
 ```
 
-More details coming soon, but for now see [example.php](https://github.com/deploy-dog/slavedriver/blob/master/example.php) for an example.
+More details coming soon, but for now see [slavedriver.php](https://github.com/deploy-dog/slavedriver/blob/master/slavedriver.php) for an example.
 
 ## Events
 Events are dispatched throughout the process which you can listen to.
