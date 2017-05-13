@@ -18,9 +18,15 @@ Events are dispatched throughout the process which you can listen to.
 We're currently using [phossa2/event](https://github.com/phossa2/event) for the events as it is [PSR-14 (Event Manager)](https://github.com/php-fig/fig-standards/blob/master/proposed/event-manager.md) compatible.
 PSR-14 is currently at the "proposed" stage so we should expect it to change. Once it is accepted we intend to swap Slavedriver to require any PSR-14 compatible library rather than phossa2/event specifically. 
 
-You can listen to the follow events to monitor your Slavedriver jobs and act accordingly. All events are given the target of the `Job` object.
+You can listen to the follow events to monitor your Slavedriver jobs and act accordingly.
 
 *Hint: Use the Job's `CustomData` if you want to pass through additional data, such as whether to wake people up in the night if the job fails!*
+
+### Slavedriver itself started (should be roughly every 1 minute)
+* Event: `slavedriver.started`
+* Event constant: `Slavedriver::EVENT_SLAVEDRIVER_STARTED`
+* Event target: *None*
+* Event params: *None*
 
 ### Job started
 * Event: `slavedriver.job.started`

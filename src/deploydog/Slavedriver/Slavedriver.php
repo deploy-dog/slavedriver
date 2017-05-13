@@ -38,6 +38,7 @@ class Slavedriver {
     /** @var float */
     private $startTime = null;
 
+    const EVENT_SLAVEDRIVER_STARTED = 'slavedriver.started';
     const EVENT_JOB_STARTED = 'slavedriver.job.started';
     const EVENT_JOB_FINISHED_SUCCESS = 'slavedriver.job.finished.success';
     const EVENT_JOB_FINISHED_ERROR = 'slavedriver.job.finished.error';
@@ -133,6 +134,9 @@ class Slavedriver {
                 function () {
                     // Ensure we have a slave name
                     $this->ensureSlaveNameSet();
+
+                    // Event that Slavedriver itself is running
+                    $this->eventsDispatcher->trigger(self::EVENT_SLAVEDRIVER_STARTED);
 
                     // Load in running jobs
                     $this->loadRunningJobs();
