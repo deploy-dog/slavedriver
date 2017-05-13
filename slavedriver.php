@@ -6,7 +6,9 @@ require_once __DIR__ . '/vendor/autoload.php';
 // This is an assumption by Slavedriver so if this is not the case, it will NOT work as expected.
 
 // We recommend scrapbook for your PSR-16 compatible cache, but use whatever you like!
-$cache = new \MatthiasMullie\Scrapbook\Adapters\MemoryStore();
+$adapter = new \League\Flysystem\Adapter\Local('/tmp/dd.slavedriver.cache', LOCK_EX);
+$filesystem = new \League\Flysystem\Filesystem($adapter);
+$cache = new \MatthiasMullie\Scrapbook\Adapters\Flysystem($filesystem);
 $simpleCache = new \MatthiasMullie\Scrapbook\Psr16\SimpleCache($cache);
 
 // Events use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage. Once PRS-14 is "accepted" we'll probably move to this requirement implementing PRS-14 instead of phossa2/event specifically

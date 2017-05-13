@@ -434,14 +434,19 @@ class Slavedriver {
      * Loads the currently running jobs to the cache provider so that if this main process dies, we don't lose track of what is going on
      */
     private function loadRunningJobs(){
-        // TODO: Implement running job loading
+        $cached = $this->cacheInterface->get('slavedriver.runningJobs');
+        if (!is_null($cached)) {
+            $this->runningJobs = unserialize($cached);
+            $this->log(LogLevel::DEBUG, 'Loaded '.count($this->runningJobs).' running job(s) from the cache.');
+        }
     }
 
     /**
      * Saves the currently running jobs to the cache provider so that if this main process dies, we don't lose track of what is going on
+     * @return bool
      */
     private function saveRunningJobs(){
-        // TODO: Implement running job saving
+        return $this->cacheInterface->set('slavedriver.runningJobs', serialize($this->runningJobs));
     }
 
     /**
