@@ -175,7 +175,6 @@ class Slavedriver {
                 }
             );
         } catch (LockAcquireException $e){
-            // TODO: Log that we couldn't get a lock
             throw new CannotGetLock($e->getMessage());
         }
     }
@@ -254,15 +253,15 @@ class Slavedriver {
                     // Log finished
                     $this->log(
                         $this->logLevels->getJobStartingAndFinishing(),
-                        JobLogMessage::init($runningJob->getJob(), 'Job finished with exit code '.(is_null($jobExitCode) ? '?' : $jobExitCode).'. It ran for approximately ' . number_format($jobRunTime, 1).'s.') // TODO: Format this into hours, minutes and seconds
+                        JobLogMessage::init($runningJob->getJob(), 'Job finished with exit code '.(is_null($jobExitCode) ? '?' : $jobExitCode).'. It ran for approximately ' . $this->secondsToTime($jobRunTime).'.')
                     );
 
                     // If error exit code, log that too
                     if ($jobExitCode !== 0){
                         if (is_null($jobExitCode)){
-                            $exitMessage = JobLogMessage::init($runningJob->getJob(), 'Slavedriver was unable to determine exit code, sorry. The job ran for approximately ' . number_format($jobRunTime, 1).'s.');
+                            $exitMessage = JobLogMessage::init($runningJob->getJob(), 'Slavedriver was unable to determine exit code, sorry. The job ran for approximately ' . $this->secondsToTime($jobRunTime).'.');
                         } else {
-                            $exitMessage = JobLogMessage::init($runningJob->getJob(), 'Job finished with exit code '.$jobExitCode.'. It ran for approximately ' . number_format($jobRunTime, 1).'s.'); // TODO: Format this into hours, minutes and seconds
+                            $exitMessage = JobLogMessage::init($runningJob->getJob(), 'Job finished with exit code '.$jobExitCode.'. It ran for approximately ' . $this->secondsToTime($jobRunTime).'.');
                         }
 
                         $this->log(
@@ -467,5 +466,44 @@ class Slavedriver {
         if ($this->logger instanceof LoggerInterface){
             $this->logger->log($level, $message, $context);
         }
+    }
+
+    // Based on code from http://stackoverflow.com/a/8273826/1178671, thanks
+    private function secondsToTime($inputSeconds) {
+        $secondsInAMinute = 60;
+        $secondsInAnHour = 60 * $secondsInAMinute;
+        $secondsInADay = 24 * $secondsInAnHour;
+
+        // Extract days
+        $days = floor($inputSeconds / $secondsInADay);
+
+        // Extract hours
+        $hourSeconds = $inputSeconds % $secondsInADay;
+        $hours = floor($hourSeconds / $secondsInAnHour);
+
+        // Extract minutes
+        $minuteSeconds = $hourSeconds % $secondsInAnHour;
+        $minutes = floor($minuteSeconds / $secondsInAMinute);
+
+        // Extract the remaining seconds
+        $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+        $seconds = ceil($remainingSeconds);
+
+        // Format and return
+        $timeParts = [];
+        $sections = [
+            'day' => (int)$days,
+            'hour' => (int)$hours,
+            'minute' => (int)$minutes,
+            'second' => (int)$seconds,
+        ];
+
+        foreach ($sections as $name => $value){
+            if ($value > 0){
+                $timeParts[] = $value. ' '.$name.($value == 1 ? '' : 's');
+            }
+        }
+
+        return implode(', ', $timeParts);
     }
 }
