@@ -60,20 +60,17 @@ class Slavedriver {
     /**
      * Slavedriver constructor.
      * @param CacheInterface $cacheInterface
-     * @param LoggerInterface $logger
-     * @param LogLevels $logLevels
      * @param EventDispatcher $eventsDispatcher
      * @param string $varDir A directory that Slavedriver can use for write files it needs for it's normal function
      * @throws UnsupportedOS
      * @throws VarDirUnusable
      */
-    public function __construct(CacheInterface $cacheInterface, LoggerInterface $logger, LogLevels $logLevels, EventDispatcher $eventsDispatcher, $varDir = '/tmp/dd.slavedriver') {
+    public function __construct(CacheInterface $cacheInterface, EventDispatcher $eventsDispatcher, $varDir = '/tmp/dd.slavedriver') {
         $this->cacheInterface = $cacheInterface;
-        $this->logger = $logger;
-        $this->logLevels = $logLevels;
         $this->eventsDispatcher = $eventsDispatcher;
         $this->startTime = microtime(true);
         $this->varDir = rtrim($varDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->logLevels = new LogLevels(); // This is a default
 
         // Throw exception if not on unix based OS
         if (!in_array(strtoupper(PHP_OS), ['LINUX', 'FREEBSD', 'DARWIN'])){
@@ -92,20 +89,48 @@ class Slavedriver {
         }
     }
 
+    /**
+     * @param LoggerInterface $logger
+     * @param LogLevels|null $logLevels
+     * @return $this
+     * @throws InvalidSlavedriverConfig
+     */
+    public function setLogger(LoggerInterface $logger, $logLevels = null){
+        $this->logger = $logger;
+
+        if ($logLevels instanceof LogLevels) {
+            $this->logLevels = $logLevels;
+        } elseif (!is_null($logLevels)){
+            throw new InvalidSlavedriverConfig('You can use the default logLevels but, if you specifiy something custom, it must be an instance of Slavedriver/LogLevels.');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $slaveName
+     * @return $this
+     * @throws InvalidJob
+     */
     public function setSlaveName($slaveName){
         if (is_callable($slaveName)){
             $this->slaveName = $slaveName();
-            return;
+            return $this;
         }
 
         if (is_string($slaveName)){
             $this->slaveName = $slaveName;
-            return;
+            return $this;
         }
 
         throw new InvalidJob('The slave name must be either a string or a callable.');
     }
 
+    /**
+     * @param Job $job
+     * @return $this
+     * @throws InvalidJob
+     */
     public function addJob(Job $job){
         // Ensure job name is unique
         foreach ($this->jobs as $existingJob){
@@ -115,6 +140,7 @@ class Slavedriver {
         }
 
         $this->jobs[] = $job;
+        return $this;
     }
 
     /**
@@ -155,7 +181,7 @@ class Slavedriver {
     }
 
     private function startAllRequiredJobs(){
-        $this->logger->debug('Slavedriver has been given ' . count($this->jobs) . ' job(s) to manage.');
+        $this->log(LogLevel::DEBUG, 'Slavedriver has been given ' . count($this->jobs) . ' job(s) to manage.');
 
         foreach ($this->jobs as $job) {
             // Determine if job needs to run at this time on this slave
@@ -165,7 +191,7 @@ class Slavedriver {
                     $this->startProcess($job);
                 } else {
                     if ($this->isJobStillRunningFromBefore($job)) {
-                        $this->logger->log(
+                        $this->log(
                             $this->logLevels->getCannotStartNextAsLastStillRunning(),
                             JobLogMessage::init($job, 'Cannot start next instance as the last is still running.')
                         );
@@ -177,7 +203,7 @@ class Slavedriver {
                     }
                 }
             } else {
-                $this->logger->debug('Job '.$job->getName().' does not need to run now on slave '.$this->slaveName.'.');
+                $this->log(LogLevel::DEBUG, 'Job '.$job->getName().' does not need to run now on slave '.$this->slaveName.'.');
             }
         }
     }
@@ -188,7 +214,7 @@ class Slavedriver {
             // Check on outputs of jobs, which jobs are still running, exit codes, etc
             foreach ($this->runningJobs as $runningJobKey => $runningJob){
                 // Debug Logging
-                $this->logger->log(LogLevel::DEBUG, 'Checking status of running job ' . $runningJob->getJob()->getName());
+                $this->log(LogLevel::DEBUG, 'Checking status of running job ' . $runningJob->getJob()->getName());
 
                 // Read stdout
                 $stdOut = $this->readRemainderOfFile($runningJob->getProcessFilesDir().self::FILENAME_STDOUT, $runningJob->getStdOutReadSoFar());
@@ -226,7 +252,7 @@ class Slavedriver {
                     }
 
                     // Log finished
-                    $this->logger->log(
+                    $this->log(
                         $this->logLevels->getJobStartingAndFinishing(),
                         JobLogMessage::init($runningJob->getJob(), 'Job finished with exit code '.(is_null($jobExitCode) ? '?' : $jobExitCode).'. It ran for approximately ' . number_format($jobRunTime, 1).'s.') // TODO: Format this into hours, minutes and seconds
                     );
@@ -239,7 +265,7 @@ class Slavedriver {
                             $exitMessage = JobLogMessage::init($runningJob->getJob(), 'Job finished with exit code '.$jobExitCode.'. It ran for approximately ' . number_format($jobRunTime, 1).'s.'); // TODO: Format this into hours, minutes and seconds
                         }
 
-                        $this->logger->log(
+                        $this->log(
                             $this->logLevels->getErrorExitCode(),
                             $exitMessage
                         );
@@ -279,7 +305,7 @@ class Slavedriver {
                         $runningJob->getProcess()->stop();
 
                         // Log
-                        $this->logger->log(
+                        $this->log(
                             $this->logLevels->getNeedingToBeKilled(),
                             JobLogMessage::init($runningJob->getJob(), 'Job hit timeout and was killed.')
                         );
@@ -292,7 +318,7 @@ class Slavedriver {
                         $runningJob->setAlreadyWarnedNotFinishedWhenExpected();
 
                         // Log
-                        $this->logger->log(
+                        $this->log(
                             $this->logLevels->getNotFinishedWhenExpected(),
                             JobLogMessage::init($runningJob->getJob(), 'Job is still running but was expected to have finished by now.')
                         );
@@ -343,7 +369,7 @@ class Slavedriver {
 
         // Still not got one, log and throw exception!
         $message = 'Unable to determine the slaveName for this host.';
-        $this->logger->log($this->logLevels->getInvalidConfig(), $message);
+        $this->log($this->logLevels->getInvalidConfig(), $message);
         throw new InvalidSlavedriverConfig($message);
     }
 
@@ -369,7 +395,7 @@ class Slavedriver {
 
     private function startProcess(Job $job){
         // Log
-        $this->logger->log(
+        $this->log(
             $this->logLevels->getJobStartingAndFinishing(),
             JobLogMessage::init($job, 'Starting job')
         );
@@ -392,7 +418,7 @@ class Slavedriver {
         $process->run();
 
         // Log
-        $this->logger->log(
+        $this->log(
             $this->logLevels->getJobStartingAndFinishing(),
             JobLogMessage::init($job, 'Job started with command: ' . $process->getFullCommand())
         );
@@ -426,5 +452,20 @@ class Slavedriver {
      */
     public function setMonitoringSleepInterval($monitoringSleepInterval) {
         $this->monitoringSleepInterval = $monitoringSleepInterval;
+    }
+
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    private function log($level, $message, $context = []){
+        if ($this->logger instanceof LoggerInterface){
+            $this->logger->log($level, $message, $context);
+        }
     }
 }

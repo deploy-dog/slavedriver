@@ -9,20 +9,16 @@ require_once __DIR__ . '/vendor/autoload.php';
 $cache = new \MatthiasMullie\Scrapbook\Adapters\MemoryStore();
 $simpleCache = new \MatthiasMullie\Scrapbook\Psr16\SimpleCache($cache);
 
-// We'll use the default log levels, the defaults are sensible for most projects.
-// You can use this to set your own defaults and can even set alternative log levels for individual jobs (e.g. if you has an ultra important job)
-$logLevels = new \deploydog\Slavedriver\LogLevels();
-
-// Build logger
-$logger = new \Monolog\Logger('Slavedriver');
-$logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__.'/test.log'));
-
 // Events use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage. Once PRS-14 is "accepted" we'll probably move to this requirement implementing PRS-14 instead of phossa2/event specifically
 $eventsDispatcher = new \Phossa2\Event\EventDispatcher();
 $eventsDispatcher->attach('slavedriver.*', function(\Phossa2\Event\Event $event) {
-    /** @var \deploydog\Slavedriver\Job $job */
     $job = $event->getTarget();
-    echo 'Got event "' . $event->getName().'" on job "'.$job->getName().'"'."\n";
+
+    if ($job instanceof \deploydog\Slavedriver\Job) {
+        echo 'Got event "'.$event->getName().'" on job "'.$job->getName().'"'."\n";
+    } else {
+        echo 'Got event "'.$event->getName().'"'."\n";
+    }
 
     if ($event->getName() == \deploydog\Slavedriver\Slavedriver::EVENT_JOB_OUTPUT_STDOUT){
         echo 'stdOut > ' . $event->getParam('stdOut')."\n";
@@ -32,7 +28,19 @@ $eventsDispatcher->attach('slavedriver.*', function(\Phossa2\Event\Event $event)
 });
 
 // Instantiate Slavedriver
-$slavedriver = new \deploydog\Slavedriver\Slavedriver($simpleCache, $logger, $logLevels, $eventsDispatcher);
+$slavedriver = new \deploydog\Slavedriver\Slavedriver($simpleCache, $eventsDispatcher);
+
+// We want a logger in this example and we're showing how we could set customer log levels
+// We'll use the default log levels, the defaults are sensible for most projects.
+//If using the defaults, you don't actually need to pass this into $slavedriver->setLogger() but we're showing it here for the example
+$logLevels = new \deploydog\Slavedriver\LogLevels();
+
+// Build logger
+$logger = new \Monolog\Logger('Slavedriver');
+$logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__.'/test.log'));
+
+// Give logger to Slavedriver
+$slavedriver->setLogger($logger, $logLevels);
 
 // You can set the Slave Name that the machine running this job has (so it know which jobs to do). We'll look at the following (in this order)
 // Manually set using $slavedriver->setSlaveName()
