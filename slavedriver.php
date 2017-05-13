@@ -68,11 +68,14 @@ $slavedriver->addJob($job);
 // Job 2
 //
 
-// Create a job
+// Create a job (you can also chain the setup if you prefer)
 $job = new \deploydog\Slavedriver\Job('List directory contents');
-$job->setCommand('ls -alh');
-$job->setTimeout(2);
-$job->setSchedule('* * * * *');
+$job->setCommand('ls -alh')
+->setTimeout(2)
+->setSchedule('* * * * *')
+->setCustomData([
+    'critical' => true, // You could listen to the "slavedriver.job.finished.error" event and if the job has this set, trigger an alert to PagerDuty or something!
+]);
 
 // Add the job to Slavedriver
 $slavedriver->addJob($job);
