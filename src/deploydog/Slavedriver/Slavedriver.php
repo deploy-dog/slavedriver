@@ -209,7 +209,7 @@ class Slavedriver {
 
     private function monitorProgressOfJobs(){
         $endTime = $this->startTime + self::RUNTIME_SECONDS - self::END_LEEWAY_SECONDS;
-        while (microtime(true) < $endTime){
+        while (time() < $endTime){
             // Check on outputs of jobs, which jobs are still running, exit codes, etc
             foreach ($this->runningJobs as $runningJobKey => $runningJob){
                 // Debug Logging
@@ -335,8 +335,10 @@ class Slavedriver {
 
             // Sleep for the monitoring interval
             if (!is_null($this->monitoringSleepInterval)){
-                if (microtime(true) + $this->monitoringSleepInterval < $endTime) {
+                if (time() + $this->monitoringSleepInterval < $endTime) {
                     sleep($this->monitoringSleepInterval);
+                } else {
+                    break;
                 }
             }
         }
