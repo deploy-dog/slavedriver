@@ -22,13 +22,57 @@ You can listen to the follow events to monitor your Slavedriver jobs and act acc
 
 *Hint: Use the Job's `CustomData` if you want to pass through additional data, such as whether to wake people up in the night if the job fails!*
 
-| Event | Event Constant | Argv array |
-| ----- | -------------- | ---------- |
-| `slavedriver.job.started` | `Slavedriver::EVENT_JOB_STARTED` | `[]` |
-| `slavedriver.job.finished.success` | `Slavedriver::EVENT_JOB_FINISHED_SUCCESS` | `[]` |
-| `slavedriver.job.finished.error` | `Slavedriver::EVENT_JOB_FINISHED_ERROR` | `['exitCode' => 1]` |
-| `slavedriver.job.output.stdout` | `Slavedriver::EVENT_JOB_OUTPUT_STDOUT` | `['stdOut' => 'Full command stdOut']` |
-| `slavedriver.job.output.stderr` | `Slavedriver::EVENT_JOB_OUTPUT_STDERR` | `['stdErr' => 'Full command stdErr']` |
-| `slavedriver.job.timeout` | `Slavedriver::EVENT_JOB_TIMEOUT` | `[]` |
-| `slavedriver.job.last_instance_still_running` | `Slavedriver::EVENT_JOB_LAST_INSTANCE_STILL_RUNNING` | `[]` |
-| `slavedriver.job.expected_runtime_elapsed` | `Slavedriver::EVENT_JOB_EXPECTED_RUNTIME_ELAPSED` | `[]` |
+### Job started
+* Event: `slavedriver.job.started`
+* Event constant: `Slavedriver::EVENT_JOB_STARTED`
+* Event target: The `Job` object
+* Event params: *None*
+
+### Job finished successfully
+* Event: `slavedriver.job.finished.success`
+* Event constant: `Slavedriver::EVENT_JOB_FINISHED_SUCCESS`
+* Event target: The `Job` object
+* Event params: *None*
+
+### Job finished with error (based on exit code)
+* Event: `slavedriver.job.finished.error`
+* Event constant: `Slavedriver::EVENT_JOB_FINISHED_ERROR`
+* Event target: The `Job` object
+* Event params:
+  * `exitCode` = The exit code of the command
+  
+### Job stdOut data (this is called every few seconds with additional data)
+* Event: `slavedriver.job.output.stdout`
+* Event constant: `Slavedriver::EVENT_JOB_OUTPUT_STDOUT`
+* Event target: The `Job` object
+* Event params:
+  * `stdOut` = The stdOut data since the last trigger of this event
+  
+### Job stdErr data (this is called every few seconds with additional data)
+* Event: `slavedriver.job.output.stderr`
+* Event constant: `Slavedriver::EVENT_JOB_OUTPUT_STDERR`
+* Event target: The `Job` object
+* Event params:
+  * `stdErr` = The stdErr data since the last trigger of this event
+  
+### Job was still running when the timeout value was hit (and it will have been killed)
+* Event: `slavedriver.job.timeout`
+* Event constant: `Slavedriver::EVENT_JOB_TIMEOUT`
+* Event target: The `Job` object
+* Event params: *None*
+
+### Job should have been started but the last instance was still running  and they cannot overlap
+* Event: `slavedriver.job.last_instance_still_running`
+* Event constant: `Slavedriver::EVENT_JOB_LAST_INSTANCE_STILL_RUNNING`
+* Event target: The `Job` object
+* Event params: *None*
+
+### Job still running but expected runtime has elapsed (job not killed)
+* Event: `slavedriver.job.expected_runtime_elapsed`
+* Event constant: `Slavedriver::EVENT_JOB_EXPECTED_RUNTIME_ELAPSED`
+* Event target: The `Job` object
+* Event params: *None*
+
+
+## Logging
+Logging is provided by any [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compatible logger.
