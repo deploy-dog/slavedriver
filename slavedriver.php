@@ -83,6 +83,10 @@ $job->setCommand('ls -alh')
 $slavedriver->addJob($job);
 
 
+// Alternatively (or in addition) if you have lots of jobs you might want to include one per file and get Slavedriver to recursively look in directory for jobs
+// Your included files should return an instance of the Job object.
+$slavedriver->addAllJobsInDirectory(__DIR__.'/DirWithJobs');
+
 
 // Optionally override the sleep internal between monitoring. A lower time gives more real-time monitoring but more disk I/O etc. Tweak as required.
 $slavedriver->setMonitoringSleepInterval(3);

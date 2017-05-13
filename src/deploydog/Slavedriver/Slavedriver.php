@@ -149,7 +149,17 @@ class Slavedriver {
      * @param $directory
      */
     public function addAllJobsInDirectory($directory){
-        // TODO: Implement adding all jobs in a directory
+        $directory = rtrim($directory, DIRECTORY_SEPARATOR);
+
+        foreach (glob($directory.'/*.php') as $filename) {
+            $job = include $filename;
+            $this->addJob($job);
+        }
+
+        foreach (glob($directory.'/**/*.php') as $filename) {
+            $job = include $filename;
+            $this->addJob($job);
+        }
     }
 
     public function run(){
