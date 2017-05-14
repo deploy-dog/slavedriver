@@ -3,13 +3,20 @@ A PHP based cron job runner. Manage, monitor, log and react to problems with you
 Created by the team at [deploy.dog](http://deploy.dog) initially for internal use, but modified and released for other to enjoy too.
 
 [![Travis CI](https://img.shields.io/travis/deploy-dog/slavedriver.svg?maxAge=3600)](https://travis-ci.org/deploy-dog/slavedriver)
-[![Packagist](https://img.shields.io/packagist/v/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
+[![Packagist](https://img.shields.io/packagist/v/deploy-dog/slavedriver.svg?maxAge=3600)](https://packagist.org/packages/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/dt/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/dm/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
-[![Packagist](https://img.shields.io/packagist/l/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
+[![Packagist](https://img.shields.io/packagist/l/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver/blob/master/LICENSE.md)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/deploy-dog/slavedriver/master/badge.svg)](https://travis-ci.org/deploy-dog/slavedriver)
 
 [![deploy.dog - Finally, website deployments done right!](http://deploy.dog/assets/Logos/Email.png)](http://deploy.dog)
+
+## PHP version support
+* PHP 5.6
+* PHP 7.0
+* PHP 7.1
+* HHVM
+
 
 ## Installation (via Composer obviously)
 
