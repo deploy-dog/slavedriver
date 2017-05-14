@@ -7,6 +7,7 @@ Created by the team at [deploy.dog](http://deploy.dog) initially for internal us
 [![Packagist](https://img.shields.io/packagist/dt/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/dm/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/l/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
+[![PHP 7 ready](http://php7ready.timesplinter.ch/deploy-dog/slavedriver/master/badge.svg)](https://travis-ci.org/deploy-dog/slavedriver)
 
 [![deploy.dog - Finally, website deployments done right!](http://deploy.dog/assets/Logos/Email.png)](http://deploy.dog)
 
