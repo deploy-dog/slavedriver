@@ -2,8 +2,12 @@
 A PHP based cron job runner. Manage, monitor, log and react to problems with your scheduled tasks.
 Created by the team at [deploy.dog](http://deploy.dog) initially for internal use, but modified and released for other to enjoy too.
 
-## Installation
-*Composer based install coming soon. This is not yet ready to be released or used. Hang in there...*
+## Installation (via Composer obviously)
+
+```bash
+composer require deploy-dog/slavedriver
+```
+
 
 ## Usage
 
