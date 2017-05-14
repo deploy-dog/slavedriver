@@ -102,7 +102,7 @@ class Slavedriver {
         if ($logLevels instanceof LogLevels) {
             $this->logLevels = $logLevels;
         } elseif (!is_null($logLevels)){
-            throw new InvalidSlavedriverConfig('You can use the default logLevels but, if you specifiy something custom, it must be an instance of Slavedriver/LogLevels.');
+            throw new InvalidSlavedriverConfig('You can use the default logLevels but, if you specify something custom, it must be an instance of Slavedriver/LogLevels.');
         }
 
         return $this;
