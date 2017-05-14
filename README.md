@@ -2,6 +2,7 @@
 A PHP based cron job runner. Manage, monitor, log and react to problems with your scheduled tasks.
 Created by the team at [deploy.dog](http://deploy.dog) initially for internal use, but modified and released for other to enjoy too.
 
+[![Travis CI](https://img.shields.io/travis/deploy-dog/slavedriver.svg?maxAge=3600)](https://travis-ci.org/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/v/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/dt/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/dm/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver)
