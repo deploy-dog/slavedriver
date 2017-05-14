@@ -7,7 +7,8 @@ Created by the team at [deploy.dog](http://deploy.dog) initially for internal us
 
 ## Usage
 
-### Create your file which describes your jobs. We suggest using a file named `slavedriver.php` in the project root, and that's what we'll be using in this example
+### Create your file which describes your jobs.
+We suggest using a file named `slavedriver.php` in the project root, and that's what we'll be using in this example.
 
 **A more detailed example of this file can be seen [here](https://github.com/deploy-dog/slavedriver/blob/master/slavedriver.php), but the basics are below**
 
@@ -16,13 +17,15 @@ Created by the team at [deploy.dog](http://deploy.dog) initially for internal us
 require_once __DIR__ . '/vendor/autoload.php';
 
 // We recommend scrapbook for your PSR-16 compatible cache, but use whatever you like!
-// This example is using Scrapbook and Flysystem to write a cache file to the disk, but you'll probably want to use Redis or something better like that
+// This example is using Scrapbook and Flysystem to write a cache file to the disk, but you'll
+// probably want to use Redis or something better like that
 $adapter = new \League\Flysystem\Adapter\Local('/tmp/dd.slavedriver.cache', LOCK_EX);
 $filesystem = new \League\Flysystem\Filesystem($adapter);
 $cache = new \MatthiasMullie\Scrapbook\Adapters\Flysystem($filesystem);
 $simpleCache = new \MatthiasMullie\Scrapbook\Psr16\SimpleCache($cache);
 
-// Events use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage. Once PRS-14 is "accepted" we'll probably move to this requirement implementing PRS-14 instead of phossa2/event specifically
+// Events use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage.
+// Once PRS-14 is "accepted" we'll probably move to this requirement implementing PRS-14 instead of phossa2/event specifically
 $eventsDispatcher = new \Phossa2\Event\EventDispatcher();
 $eventsDispatcher->attach('slavedriver.*', function(\Phossa2\Event\Event $event) {
     $job = $event->getTarget();
@@ -34,12 +37,12 @@ $slavedriver = new \deploydog\Slavedriver\Slavedriver($simpleCache, $eventsDispa
 
 // Want logging (in addition to events)? See the Logging section of the readme below
 
-// You can set the Slave Name that the machine running this job has (so it know which jobs to do). We'll look at the following (in this order)
+// You can set the Slave Name that the machine running this job has (so it know which jobs to do).
+// We'll look at the following (in this order)
 // Manually set using $slavedriver->setSlaveName()
 // Environment var "SLAVEDRIVER_SLAVE_NAME"
 // Node hostname (from php's gethostname() function)
 $slavedriver->setSlaveName('test1');
-
 
 // Create a job
 $job = new \deploydog\Slavedriver\Job('Sleep for a bit');
@@ -52,10 +55,10 @@ $job->setSlaves(['test1']); // Optional, default to all slaves
 // Add the job to Slavedriver
 $slavedriver->addJob($job);
 
-// Add more jobs like with the example above
+// Add more jobs like with the example above..
 
-
-// Alternatively (or in addition) if you have lots of jobs you might want to include one per file and get Slavedriver to recursively look in directory for jobs
+// Alternatively (or in addition) if you have lots of jobs you might want to include one per file
+// and get Slavedriver to recursively look in directory for jobs
 // Your included files should return an instance of the Job object.
 $slavedriver->addAllJobsInDirectory(__DIR__.'/DirWithJobs');
 
