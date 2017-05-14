@@ -201,7 +201,11 @@ class Job {
                 $callable = $this->schedule;
                 return $callable();
             } else {
-                $cron = CronExpression::factory($this->schedule);
+                try {
+                    $cron = CronExpression::factory($this->schedule);
+                } catch (\InvalidArgumentException $e){
+                    throw new InvalidJob($e->getMessage());
+                }
                 return $cron->isDue();
             }
         }
