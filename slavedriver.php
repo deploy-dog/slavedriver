@@ -1,5 +1,6 @@
 <?php
 
+// You'll need autoloading
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Note: This script MUST be run every 1 minute by something else (hint: your real crontab)
