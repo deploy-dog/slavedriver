@@ -1,6 +1,6 @@
 # Slavedriver
 A PHP based cron job runner. Manage, monitor, log and react to problems with your scheduled tasks.
-Created by the team at [deploy.dog](http://deploy.dog) initially for internal use, but modified and released for other to enjoy too.
+Created by the team at [deploy.dog](http://deploy.dog) initially for internal use, but released for others to enjoy too.
 
 [![Travis CI](https://img.shields.io/travis/deploy-dog/slavedriver.svg?maxAge=3600)](https://travis-ci.org/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/v/deploy-dog/slavedriver.svg?maxAge=3600)](https://packagist.org/packages/deploy-dog/slavedriver)
@@ -9,7 +9,7 @@ Created by the team at [deploy.dog](http://deploy.dog) initially for internal us
 [![Packagist](https://img.shields.io/packagist/l/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver/blob/master/LICENSE.md)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/deploy-dog/slavedriver/master/badge.svg)](https://travis-ci.org/deploy-dog/slavedriver)
 
-[![deploy.dog - Finally, website deployments done right!](http://deploy.dog/assets/Logos/Email.png)](http://deploy.dog)
+<a href="http://deploy.dog"><img src="http://deploy.dog/assets/Logos/Email.png" width="400px" alt="deploy.dog - Finally, website deployments done right!" /></a>
 
 ## Requirements
 * PHP 5.6, 7.0, 7.1 or HHVM
