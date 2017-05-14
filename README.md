@@ -11,11 +11,9 @@ Created by the team at [deploy.dog](http://deploy.dog) initially for internal us
 
 [![deploy.dog - Finally, website deployments done right!](http://deploy.dog/assets/Logos/Email.png)](http://deploy.dog)
 
-## PHP version support
-* PHP 5.6
-* PHP 7.0
-* PHP 7.1
-* HHVM
+## Requirements
+* PHP 5.6, 7.0, 7.1 or HHVM
+* Unix based OS such as Linux, FreeBSD or MacOS *(Windows is not supported at this time)*
 
 
 ## Installation (via Composer obviously)
