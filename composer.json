@@ -17,7 +17,7 @@
         "phossa2/event": "^2.1.0"
     },
     "suggest": {
-        "matthiasmullie/scrapbook": "Great library with many caching adapters compatible with Slavedriver.",
-        "monolog/monolog": "Great library with compatible loggers."
+        "matthiasmullie/scrapbook": "Caching adapters compatible with Slavedriver.",
+        "monolog/monolog": "Compatible loggers."
     }
 }

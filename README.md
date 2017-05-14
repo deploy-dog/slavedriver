@@ -35,10 +35,12 @@ $filesystem = new \League\Flysystem\Filesystem($adapter);
 $cache = new \MatthiasMullie\Scrapbook\Adapters\Flysystem($filesystem);
 $simpleCache = new \MatthiasMullie\Scrapbook\Psr16\SimpleCache($cache);
 
-// Events use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage.
-// Once PRS-14 is "accepted" we'll probably move to this requirement implementing PRS-14 instead of phossa2/event specifically
+// In this example, we use phossa2/event which is a PSR-14 event manager.
+// PSR-14 is only "proposed" at this stage. Once PSR-14 is "accepted" we'll update the required interface.
+// You can use anything that implments \Phossa2\Event\Interfaces\EventManagerInterface (which is a copy of PSR-14),
+// it doesn't actually have to be phossa2/event
 $eventsDispatcher = new \Phossa2\Event\EventDispatcher();
-$eventsDispatcher->attach('slavedriver.*', function(\Phossa2\Event\Event $event) {
+$eventsDispatcher->attach(\deploydog\Slavedriver\Slavedriver::EVENT_SLAVEDRIVER_ALL, function(\Phossa2\Event\Event $event) {
     $job = $event->getTarget();
     // See Events in the readme below for details on events
 });
@@ -87,8 +89,11 @@ You need to get something (e.g. the real system crontab) to run your Slavedriver
 
 ## Events
 Events are dispatched throughout the process which you can listen to.
-We're currently using [phossa2/event](https://github.com/phossa2/event) for the events as it is [PSR-14 (Event Manager)](https://github.com/php-fig/fig-standards/blob/master/proposed/event-manager.md) compatible.
-PSR-14 is currently at the "proposed" stage so we should expect it to change. Once it is accepted we intend to swap Slavedriver to require any PSR-14 compatible library rather than phossa2/event specifically. 
+You can use any [PSR-14 (Event Manager)](https://github.com/php-fig/fig-standards/blob/master/proposed/event-manager.md) compatible event manager.
+PSR-14 is currently at the "proposed" stage so we should expect it to change. We'd recommend using [phossa2/event](https://github.com/phossa2/event)
+as your PSR-14 event manager if you don't have one currently and don't want to implement your own. As PSR-14 is not out yet, we require
+a class which implements Phossa2\Event\Interfaces\EventManagerInterface so if you don't want to use phossa2/event you can write something else which implements
+that same class. Not ideal, I know, and we expect to change this in v2 when PSR-14 is approved.
 
 You can listen to the follow events to monitor your Slavedriver jobs and act accordingly.
 
@@ -99,7 +104,7 @@ You can listen to the follow events to monitor your Slavedriver jobs and act acc
 
 ```php
 $eventsDispatcher = new \Phossa2\Event\EventDispatcher(); // This is the same one you passed into Slavedriver on construct
-$eventsDispatcher->attach('slavedriver.job.output.stdout', function(\Phossa2\Event\Event $event) {
+$eventsDispatcher->attach(\deploydog\Slavedriver\Slavedriver::EVENT_JOB_OUTPUT_STDOUT, function(\Phossa2\Event\Event $event) {
      $job = $event->getTarget();
      $stdOut = $event->getParam('stdOut');
     
@@ -114,7 +119,7 @@ $eventsDispatcher->attach('slavedriver.job.output.stdout', function(\Phossa2\Eve
 
 ```php
 $eventsDispatcher = new \Phossa2\Event\EventDispatcher(); // This is the same one you passed into Slavedriver on construct
-$eventsDispatcher->attach('slavedriver.*', function(\Phossa2\Event\Event $event) {
+$eventsDispatcher->attach(\deploydog\Slavedriver\Slavedriver::EVENT_SLAVEDRIVER_ALL, function(\Phossa2\Event\Event $event) {
     $job = $event->getTarget();
 
     if ($job instanceof \deploydog\Slavedriver\Job) {

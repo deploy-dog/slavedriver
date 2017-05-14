@@ -9,7 +9,7 @@ use deploydog\Slavedriver\Exception\UnsupportedOS;
 use deploydog\Slavedriver\Exception\VarDirUnusable;
 use malkusch\lock\exception\LockAcquireException;
 use malkusch\lock\mutex\FlockMutex;
-use Phossa2\Event\EventDispatcher;
+use Phossa2\Event\Interfaces\EventManagerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
@@ -29,7 +29,7 @@ class Slavedriver {
     /** @var LogLevels */
     private $logLevels = null;
 
-    /** @var EventDispatcher */
+    /** @var EventManagerInterface */
     private $eventsDispatcher = null;
 
     /** @var RunningJob[] */
@@ -38,6 +38,7 @@ class Slavedriver {
     /** @var float */
     private $startTime = null;
 
+    const EVENT_SLAVEDRIVER_ALL = 'slavedriver.*';
     const EVENT_SLAVEDRIVER_STARTED = 'slavedriver.started';
     const EVENT_JOB_STARTED = 'slavedriver.job.started';
     const EVENT_JOB_FINISHED_SUCCESS = 'slavedriver.job.finished.success';
@@ -60,12 +61,12 @@ class Slavedriver {
     /**
      * Slavedriver constructor.
      * @param CacheInterface $cacheInterface
-     * @param EventDispatcher $eventsDispatcher
+     * @param EventManagerInterface $eventsDispatcher
      * @param string $varDir A directory that Slavedriver can use for write files it needs for it's normal function
      * @throws UnsupportedOS
      * @throws VarDirUnusable
      */
-    public function __construct(CacheInterface $cacheInterface, EventDispatcher $eventsDispatcher, $varDir = '/tmp/dd.slavedriver') {
+    public function __construct(CacheInterface $cacheInterface, EventManagerInterface $eventsDispatcher, $varDir = '/tmp/dd.slavedriver') {
         $this->cacheInterface = $cacheInterface;
         $this->eventsDispatcher = $eventsDispatcher;
         $this->startTime = microtime(true);

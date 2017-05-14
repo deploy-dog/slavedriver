@@ -12,9 +12,9 @@ $filesystem = new \League\Flysystem\Filesystem($adapter);
 $cache = new \MatthiasMullie\Scrapbook\Adapters\Flysystem($filesystem);
 $simpleCache = new \MatthiasMullie\Scrapbook\Psr16\SimpleCache($cache);
 
-// Events use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage. Once PRS-14 is "accepted" we'll probably move to this requirement implementing PRS-14 instead of phossa2/event specifically
+// In this example, we use phossa2/event which is a PSR-14 event manager. PSR-14 is only "proposed" at this stage. Once PSR-14 is "accepted" we'll update the required interface
 $eventsDispatcher = new \Phossa2\Event\EventDispatcher();
-$eventsDispatcher->attach('slavedriver.*', function(\Phossa2\Event\Event $event) {
+$eventsDispatcher->attach(\deploydog\Slavedriver\Slavedriver::EVENT_SLAVEDRIVER_ALL, function(\Phossa2\Event\Event $event) {
     $job = $event->getTarget();
 
     if ($job instanceof \deploydog\Slavedriver\Job) {
