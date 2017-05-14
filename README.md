@@ -1,6 +1,6 @@
 # Slavedriver
 A PHP based cron job runner. Manage, monitor, log and react to problems with your scheduled tasks.
-Created by the team at [deploy.dog](http://deploy.dog) initially for internal use, but released for others to enjoy too.
+Created by [deploy.dog](http://deploy.dog) initially for internal use, but released for others to enjoy too.
 
 [![Travis CI](https://img.shields.io/travis/deploy-dog/slavedriver.svg?maxAge=3600)](https://travis-ci.org/deploy-dog/slavedriver)
 [![Packagist](https://img.shields.io/packagist/v/deploy-dog/slavedriver.svg?maxAge=3600)](https://packagist.org/packages/deploy-dog/slavedriver)
