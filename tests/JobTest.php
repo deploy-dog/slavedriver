@@ -1,10 +1,11 @@
 <?php
 namespace deploydog\Slavedriver\Tests;
 
+use deploydog\Slavedriver\Exception\InvalidJob;
 use deploydog\Slavedriver\Job;
 use PHPUnit\Framework\TestCase;
 
-class NeedsToRunTest extends TestCase
+class JobTest extends TestCase
 {
     public function test_cron_expression_every_minute_all_slaves()
     {
@@ -21,6 +22,12 @@ class NeedsToRunTest extends TestCase
     public function test_cron_expression_every_minute_wrong_slave()
     {
         $job = (new Job('Test Job'))->setSchedule('* * * * *')->setSlaves(['Aesop']);
+        $this->assertFalse($job->needsToRun('Spartacus'));
+    }
+
+    public function test_cron_expression_every_minute_disabled()
+    {
+        $job = (new Job('Test Job'))->setSchedule('* * * * *')->setEnabled(false);
         $this->assertFalse($job->needsToRun('Spartacus'));
     }
 
@@ -46,4 +53,24 @@ class NeedsToRunTest extends TestCase
         $this->assertFalse($job->needsToRun('Spartacus'));
     }
 
+    public function test_setting_invalid_schedule_string()
+    {
+        $this->expectException(InvalidJob::class);
+
+        $job = (new Job('Test Job'))->setSchedule('I should be a cron schedule!');
+        $job->needsToRun('Spartacus');
+    }
+
+    public function test_setting_invalid_schedule_class()
+    {
+        $this->expectException(InvalidJob::class);
+
+        $job = (new Job('Test Job'))->setSchedule((new \stdClass()));
+    }
+
+    public function test_name_slug()
+    {
+        $job = (new Job('Test Job'));
+        $this->assertEquals('test-job', $job->getNameSlug());
+    }
 }
