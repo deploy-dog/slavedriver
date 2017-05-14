@@ -215,3 +215,8 @@ $logLevels->setErrorExitCode(\Psr\Log\LogLevel::ALERT);
 
 $slavedriver->setLogger($logger, $logLevels);
 ```
+
+## Exceptions
+All exceptions thrown by Slavedriver extend the base Slavedriver exception `deploydog\Slavedriver\Exception\Slavedriver` which extends the base PHP exception `\Exception`.
+Different Slavedriver exceptions are thrown for different reasons, for example `InvalidJob` and `InvalidSlavedriverConfig`.
+Check the [Exceptions](https://github.com/deploy-dog/slavedriver/tree/master/src/deploydog/Slavedriver/Exception) directory for the possible options.
