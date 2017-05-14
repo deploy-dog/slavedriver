@@ -7,13 +7,11 @@ use Psr\Log\LogLevel;
 
 class LogLevels {
     private $jobStartingAndFinishing = LogLevel::NOTICE;
-    private $errorExitCode = LogLevel::CRITICAL;
-    private $stdOut = LogLevel::INFO;
-    private $stdErr = LogLevel::ERROR;
+    private $errorExitCode = LogLevel::ERROR;
     private $invalidConfig = LogLevel::CRITICAL;
     private $notFinishedWhenExpected = LogLevel::WARNING;
-    private $needingToBeKilled = LogLevel::CRITICAL;
-    private $cannotStartNextAsLastStillRunning = LogLevel::CRITICAL;
+    private $needingToBeKilled = LogLevel::ERROR;
+    private $cannotStartNextAsLastStillRunning = LogLevel::ERROR;
 
     private function validateLogLevel($logLevel){
         if (!in_array($logLevel, [
@@ -60,40 +58,6 @@ class LogLevels {
     public function setErrorExitCode($errorExitCode) {
         $this->validateLogLevel($errorExitCode);
         $this->errorExitCode = $errorExitCode;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStdOut() {
-        return $this->stdOut;
-    }
-
-    /**
-     * @param string $stdOut
-     * @return $this
-     */
-    public function setStdOut($stdOut) {
-        $this->validateLogLevel($stdOut);
-        $this->stdOut = $stdOut;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStdErr() {
-        return $this->stdErr;
-    }
-
-    /**
-     * @param string $stdErr
-     * @return $this
-     */
-    public function setStdErr($stdErr) {
-        $this->validateLogLevel($stdErr);
-        $this->stdErr = $stdErr;
         return $this;
     }
 
