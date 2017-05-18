@@ -23,7 +23,7 @@
         "matthiasmullie/scrapbook": "Caching adapters compatible with Slavedriver.",
         "monolog/monolog": "Compatible loggers."
     },
-    "keywords": {
+    "keywords": [
         "cron",
         "cronjob",
         "cronjobs",
@@ -37,7 +37,7 @@
         "scheduled tasks",
         "scheduled job",
         "scheduled jobs"
-    },
+    ],
     "homepage": "https://github.com/deploy-dog/slavedriver",
     "authors": [
         {
