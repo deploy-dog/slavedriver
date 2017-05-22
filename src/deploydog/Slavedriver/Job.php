@@ -153,6 +153,7 @@ class Job {
     public function setWarnIfNotFinishedAfterSeconds($warnIfNotFinishedAfterSeconds)
     {
         $this->warnIfNotFinishedAfterSeconds = $warnIfNotFinishedAfterSeconds;
+        return $this;
     }
 
     /**
