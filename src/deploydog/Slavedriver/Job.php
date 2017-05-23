@@ -139,6 +139,14 @@ class Job {
     }
 
     /**
+     * @return array
+     */
+    public function getSlaves()
+    {
+        return $this->slaves;
+    }
+
+    /**
      * @param int $timeout
      * @return $this
      */
