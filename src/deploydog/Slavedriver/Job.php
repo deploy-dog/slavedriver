@@ -99,6 +99,19 @@ class Job {
             throw new InvalidJob('Schedule can be set as a callable to return a bool or a Crontab style schedule.');
         }
 
+        if (is_string($schedule)){
+            // A ? in a cron schedule is in practice the same as a *
+            // https://github.com/deploy-dog/slavedriver/issues/1
+            $schedule = str_replace('?', '*', $schedule);
+
+            // Validate cron schedule
+            try {
+                CronExpression::factory($schedule);
+            } catch (\InvalidArgumentException $e){
+                throw new InvalidJob($e->getMessage());
+            }
+        }
+
         $this->schedule = $schedule;
         return $this;
     }
@@ -157,6 +170,7 @@ class Job {
 
     /**
      * @param int $warnIfNotFinishedAfterSeconds
+     * @return $this
      */
     public function setWarnIfNotFinishedAfterSeconds($warnIfNotFinishedAfterSeconds)
     {
