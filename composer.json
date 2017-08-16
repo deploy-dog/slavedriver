@@ -22,5 +22,28 @@
     "suggest": {
         "matthiasmullie/scrapbook": "Caching adapters compatible with Slavedriver.",
         "monolog/monolog": "Compatible loggers."
-    }
+    },
+    "keywords": [
+        "cron",
+        "cronjob",
+        "cronjobs",
+        "crontab",
+        "task",
+        "task runner",
+        "job",
+        "jobs",
+        "job runner",
+        "scheduled task",
+        "scheduled tasks",
+        "scheduled job",
+        "scheduled jobs"
+    ],
+    "homepage": "https://github.com/deploy-dog/slavedriver",
+    "authors": [
+        {
+            "name": "Luke Cousins",
+            "homepage": "http://deploy.dog",
+            "role": "Project Lead"
+        }
+    ]
 }

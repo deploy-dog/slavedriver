@@ -139,6 +139,14 @@ class Job {
     }
 
     /**
+     * @return array
+     */
+    public function getSlaves()
+    {
+        return $this->slaves;
+    }
+
+    /**
      * @param int $timeout
      * @return $this
      */
@@ -153,6 +161,7 @@ class Job {
     public function setWarnIfNotFinishedAfterSeconds($warnIfNotFinishedAfterSeconds)
     {
         $this->warnIfNotFinishedAfterSeconds = $warnIfNotFinishedAfterSeconds;
+        return $this;
     }
 
     /**
