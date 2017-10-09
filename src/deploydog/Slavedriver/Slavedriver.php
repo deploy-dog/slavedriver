@@ -366,8 +366,10 @@ class Slavedriver {
 		    } else if ($matches[2] == 'K') {
 			    $memoryLimit = $matches[1] * 1024;
 		    } else {
-		    	throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit unit of '.$matches[2]);
+			    throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit unit of ' . $matches[2]);
 		    }
+	    } elseif ($memoryLimit === '-1'){
+		    return null; // No memory limit
 	    } else {
 		    throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit of '.$memoryLimit);
 	    }
