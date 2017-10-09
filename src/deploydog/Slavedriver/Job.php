@@ -140,6 +140,14 @@ class Job {
         $this->enabled = $enabled;
         return $this;
     }
+    
+    /**
+     * @return bool
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 
     /**
      * @param array $slaves
