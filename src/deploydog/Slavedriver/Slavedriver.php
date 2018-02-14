@@ -381,7 +381,12 @@ class Slavedriver {
     }
 
     private function readRemainderOfFile($file, $offset){
-        return file_get_contents($file, null, null, $offset, $this->getMaxBytesOfLogFileToRead());
+        $fileContents = file_get_contents($file, null, null, $offset, $this->getMaxBytesOfLogFileToRead());
+        if ($fileContents === false){
+        	return '';
+        } else {
+	        return $fileContents;
+        }
     }
 
     private function ensureSlaveNameSet(){
