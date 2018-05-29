@@ -10,7 +10,6 @@ Created by [deploy.dog](https://deploy.dog) initially for internal use, but rele
 [![Packagist](https://img.shields.io/packagist/l/deploy-dog/slavedriver.svg?maxAge=3600)](https://github.com/deploy-dog/slavedriver/blob/master/LICENSE.md)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/deploy-dog/slavedriver/master/badge.svg)](https://travis-ci.org/deploy-dog/slavedriver)
 
-[![deploy.dog - Finally, website deployments done right!](https://deploy.dog/assets/Logos/Email.png)](https://deploy.dog)
 <a href="https://deploy.dog"><img src="https://deploy.dog/assets/Logos/Email.png" width="400px" alt="deploy.dog - Finally, website deployments done right!" /></a>
 
 ## Requirements
