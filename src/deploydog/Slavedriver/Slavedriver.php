@@ -356,6 +356,8 @@ class Slavedriver {
     }
     
     private function getMaxBytesOfLogFileToRead(){
+	    $ten_mb = 10 * 1024 * 1024;
+	    
     	// This is based on free memory to try to prevent crashes of an output file contains so much data that we cannot read it without this running out of memory.
 	    $memoryLimit = strtoupper(trim(ini_get('memory_limit')));
 	    if (preg_match('/^(\d+)(.)$/', $memoryLimit, $matches)) {
@@ -369,15 +371,19 @@ class Slavedriver {
 			    throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit unit of ' . $matches[2]);
 		    }
 	    } elseif ($memoryLimit === '-1'){
-		    return 10 * 1024 * 1024; // No memory limit, set to 10mb as a sesnible default
+		    return $ten_mb; // No memory limit, set to 10mb as a sesnible default
 	    } else {
 		    throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit of '.$memoryLimit);
 	    }
 
 	    $spareMemory = $memoryLimit - memory_get_usage();
 
-	    // Allow reading up to 30% of the availble memory
-	    return round($spareMemory * 0.3);
+	    // Allow reading up to 30% of the availble memory or 10mb, whichever is the lower
+	    $memoryToUse = round($spareMemory * 0.3);
+	    if ($memoryToUse > $ten_mb) {
+		    $memoryToUse = $ten_mb;
+	    }
+	    return $memoryToUse;
     }
 
     private function readRemainderOfFile($file, $offset){
