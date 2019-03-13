@@ -369,7 +369,7 @@ class Slavedriver {
 			    throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit unit of ' . $matches[2]);
 		    }
 	    } elseif ($memoryLimit === '-1'){
-		    return null; // No memory limit
+		    return 10 * 1024 * 1024; // No memory limit, set to 10mb as a sesnible default
 	    } else {
 		    throw new \deploydog\Slavedriver\Exception\Slavedriver('Unable to understand memory limit of '.$memoryLimit);
 	    }
