@@ -35,7 +35,7 @@ class JobTest extends TestCase
     {
         $this->expectException(InvalidJob::class);
         $job = (new Job('Test Job'))->setSchedule('61 * * * *');
-        $job->needsToRun('Spartacus')
+        $job->needsToRun('Spartacus');
     }
 
     public function test_callable_true()
