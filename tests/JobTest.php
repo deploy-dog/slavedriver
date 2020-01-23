@@ -31,10 +31,11 @@ class JobTest extends TestCase
         $this->assertFalse($job->needsToRun('Spartacus'));
     }
 
-    public function test_cron_expression_different_time()
+    public function test_cron_expression_invalid_time()
     {
+        $this->expectException(InvalidJob::class);
         $job = (new Job('Test Job'))->setSchedule('61 * * * *');
-        $this->assertFalse($job->needsToRun('Spartacus'));
+        $job->needsToRun('Spartacus')
     }
 
     public function test_callable_true()
