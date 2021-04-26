@@ -83,6 +83,14 @@ class Job {
         $this->customData = $customData;
         return $this;
     }
+    
+    /**
+     * @return string|callable
+     */
+    public function getSchedule()
+    {
+        return $this->schedule;
+    }
 
     /**
      * @param string|callable $schedule
